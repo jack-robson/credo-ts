@@ -98,7 +98,7 @@ jobs:
       - name: Run tests
         run: yarn test --coverage --forceExit --bail
 
-      - uses: codecov/codecov-action@v3
+      - uses: codecov/codecov-action@v4
         if: always()
 
   version-stable:
