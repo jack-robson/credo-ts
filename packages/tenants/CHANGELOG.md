@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.5.0](https://github.com/openwallet-foundation/credo-ts/compare/v0.4.2...v0.5.0) (2024-02-05)
+
+### Features
+
+- **tenants:** expose get all tenants on public API ([#1731](https://github.com/openwallet-foundation/credo-ts/issues/1731)) ([f11f8fd](https://github.com/openwallet-foundation/credo-ts/commit/f11f8fdf7748b015a6f321fb16da2b075e1267ca))
+
 ## [0.4.2](https://github.com/hyperledger/aries-framework-javascript/compare/v0.4.1...v0.4.2) (2023-10-05)
 
 **Note:** Version bump only for package @credo-ts/tenants
