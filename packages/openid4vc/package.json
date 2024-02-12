@@ -2,7 +2,7 @@
   "name": "@credo-ts/openid4vc",
   "main": "build/index",
   "types": "build/index",
-  "version": "0.4.2",
+  "version": "0.4.3",
   "files": [
     "build"
   ],
@@ -24,7 +24,7 @@
     "test": "jest"
   },
   "dependencies": {
-    "@credo-ts/core": "0.4.2",
+    "@credo-ts/core": "0.5.0-alpha.124",
     "@sphereon/ssi-types": "^0.18.1",
     "@sphereon/oid4vci-client": "0.8.2-next.46",
     "@sphereon/oid4vci-common": "0.8.2-next.46",

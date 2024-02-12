@@ -87,6 +87,8 @@ export interface OpenId4VciAcceptCredentialOfferOptions {
    * for the proof of possession signature.
    */
   credentialBindingResolver: OpenId4VciCredentialBindingResolver
+
+  customData?: any
 }
 
 /**

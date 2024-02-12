@@ -23,6 +23,7 @@ import type {
   PushedAuthorizationResponse,
   AuthorizationDetails,
   AuthorizationDetailsJwtVcJson,
+  CredentialOfferPayloadV1_0_11,
 } from '@sphereon/oid4vci-common'
 
 import {
@@ -66,6 +67,8 @@ import {
 import { getSupportedJwaSignatureAlgorithms } from '../shared/utils'
 
 import { openId4VciSupportedCredentialFormats } from './OpenId4VciHolderServiceOptions'
+
+import { CustomCredentialRequestClient } from './CustomCredentialRequestClient'
 
 @injectable()
 export class OpenId4VciHolderService {
@@ -214,7 +217,7 @@ export class OpenId4VciHolderService {
     const { resolvedCredentialOffer, acceptCredentialOfferOptions, resolvedAuthorizationRequestWithCode } = options
     const { credentialOfferPayload, metadata, version, offeredCredentials } = resolvedCredentialOffer
 
-    const { credentialsToRequest, userPin, credentialBindingResolver, verifyCredentialStatus } =
+    const { credentialsToRequest, userPin, credentialBindingResolver, verifyCredentialStatus, customData } =
       acceptCredentialOfferOptions
 
     if (credentialsToRequest?.length === 0) {
@@ -324,7 +327,7 @@ export class OpenId4VciHolderService {
         .withCredentialEndpoint(metadata.credential_endpoint)
         .withTokenFromResponse(accessToken)
 
-      const credentialRequestClient = credentialRequestBuilder.build()
+      const credentialRequestClient = new CustomCredentialRequestClient(credentialRequestBuilder, customData)
       const credentialResponse = await credentialRequestClient.acquireCredentialsUsingProof({
         proofInput: proofOfPossession,
         credentialTypes: getTypesFromCredentialSupported(offeredCredential),
