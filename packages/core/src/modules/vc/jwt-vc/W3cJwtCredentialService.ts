@@ -381,7 +381,11 @@ export class W3cJwtCredentialService {
           // TODO: should this be handled on a higher level? I don't really see it being handled in the jsonld lib
           // or in the did-jwt-vc lib (it seems they don't even verify the credentials itself), but we probably need some
           // more experience on the use cases before we loosen the restrictions (as it means we need to handle it on a higher layer).
-          const credentialSubjectIds = credential.credentialSubjectIds
+          let credentialSubjectIds = credential.credentialSubjectIds
+
+          // 666 - walt.id add #[keyId] to end of subjectIds, remove them
+          credentialSubjectIds = credentialSubjectIds.map(getBeforeHash)
+
           const presentationAuthenticatesCredentialSubject = credentialSubjectIds.some(
             (subjectId) => proverVerificationMethod.controller === subjectId
           )
@@ -529,5 +533,13 @@ export class W3cJwtCredentialService {
     }
 
     return verificationMethod
+  }
+}
+
+function getBeforeHash(inputStr: string): string {
+  if (inputStr.includes('#')) {
+    return inputStr.split('#')[0]
+  } else {
+    return inputStr
   }
 }
