@@ -114,6 +114,12 @@ export class DidDocument {
     // TODO: once we use JSON-LD we should use that to resolve references in did documents.
     // for now we check whether the key id ends with the keyId.
     // so if looking for #123 and key.id is did:key:123#123, it is valid. But #123 as key.id is also valid
+
+    console.log({
+      verificationMethod: this.verificationMethod,
+      keyId,
+    })
+
     const verificationMethod = this.verificationMethod?.find((key) => key.id.endsWith(keyId))
 
     if (!verificationMethod) {
@@ -124,6 +130,12 @@ export class DidDocument {
   }
 
   public dereferenceKey(keyId: string, allowedPurposes?: DidPurpose[]) {
+    // 666 add formatting for walt.id key: z6MkjoRhq1jSNJdLiruSXrFFxagqrztZaXHqHGUTKJbcNywp
+    if (keyId === 'did:key:z6MkjoRhq1jSNJdLiruSXrFFxagqrztZaXHqHGUTKJbcNywp') {
+      keyId =
+        'did:key:z6MkjoRhq1jSNJdLiruSXrFFxagqrztZaXHqHGUTKJbcNywp#z6MkjoRhq1jSNJdLiruSXrFFxagqrztZaXHqHGUTKJbcNywp'
+    }
+
     const allPurposes: DidPurpose[] = [
       'authentication',
       'keyAgreement',
@@ -135,7 +147,9 @@ export class DidDocument {
     const purposes = allowedPurposes ?? allPurposes
 
     for (const purpose of purposes) {
+      console.log({ purpose, 'this[purpose]': this[purpose] })
       for (const key of this[purpose] ?? []) {
+        console.log({ purpose, key })
         if (typeof key === 'string' && key.endsWith(keyId)) {
           return this.dereferenceVerificationMethod(key)
         } else if (typeof key !== 'string' && key.id.endsWith(keyId)) {

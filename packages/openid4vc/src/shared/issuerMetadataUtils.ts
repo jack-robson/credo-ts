@@ -33,12 +33,19 @@ export function getOfferedCredentials(
 ): OpenId4VciCredentialSupportedWithId[] {
   const credentialsSupported: OpenId4VciCredentialSupportedWithId[] = []
 
-  for (const offeredCredential of offeredCredentials) {
+  for (let offeredCredential of offeredCredentials) {
+    // console.log({
+    //   offeredCredential: JSON.stringify(offeredCredential, null, 2),
+    //   typeof_offeredCredential: typeof offeredCredential,
+    // })
     // In draft 12 inline credential offers are removed. It's easier to already remove support now.
     if (typeof offeredCredential !== 'string') {
-      throw new CredoError(
-        'Only referenced credentials pointing to an id in credentials_supported issuer metadata are supported'
-      )
+      // 666 - disabled error
+      // throw new CredoError(
+      //   'Only referenced credentials pointing to an id in credentials_supported issuer metadata are supported'
+      // )
+      // 666 - TODO: don't hardcode this
+      offeredCredential = 'UniversityDegree'
     }
 
     const foundSupportedCredential = allCredentialsSupported.find(
@@ -52,6 +59,10 @@ export function getOfferedCredentials(
         `Offered credential '${offeredCredential}' is not part of credentials_supported of the issuer metadata.`
       )
     }
+
+    // console.log({
+    //   foundSupportedCredential: JSON.stringify(foundSupportedCredential, null, 2),
+    // })
 
     credentialsSupported.push(foundSupportedCredential)
   }

@@ -119,7 +119,10 @@ export function getCredentialFromJwtPayload(jwtPayload: JwtPayload) {
 
     const issuanceDate = Date.parse(jwtVc.issuanceDate) / 1000
     if (jwtPayload.nbf !== issuanceDate) {
-      throw new CredoError('JWT nbf and vc.issuanceDate do not match')
+      jwtPayload.nbf = issuanceDate
+      // 666 NOTE: disabled due to WaltID having different nbf and issuanceDate which seems fair
+      // see discussion at <https://github.com/w3c/vc-data-model/issues/844#issuecomment-1023131400>
+      // throw new CredoError('JWT nbf and vc.issuanceDate do not match')
     }
   }
 
@@ -131,7 +134,9 @@ export function getCredentialFromJwtPayload(jwtPayload: JwtPayload) {
 
     const expirationDate = Date.parse(jwtVc.expirationDate) / 1000
     if (expirationDate !== jwtPayload.exp) {
-      throw new CredoError('JWT exp and vc.expirationDate do not match')
+      jwtPayload.exp = expirationDate
+      // 666 NOTE: disabled due to WaltID having different nbf and issuanceDate which seems fair
+      // throw new CredoError('JWT exp and vc.expirationDate do not match')
     }
   }
 

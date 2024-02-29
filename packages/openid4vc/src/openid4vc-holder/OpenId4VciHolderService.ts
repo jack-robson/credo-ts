@@ -263,6 +263,8 @@ export class OpenId4VciHolderService {
       })
     }
 
+    console.log({ accessTokenResponse: JSON.stringify(accessTokenResponse) })
+
     if (!accessTokenResponse.successBody) {
       throw new CredoError(
         `could not acquire access token from '${metadata.issuer}'. ${accessTokenResponse.errorBody?.error}: ${accessTokenResponse.errorBody?.error_description}`
@@ -538,6 +540,7 @@ export class OpenId4VciHolderService {
       format === OpenId4VciCredentialFormatProfile.JwtVcJson ||
       format === OpenId4VciCredentialFormatProfile.JwtVcJsonLd
     ) {
+      console.log({ credentialResponse: JSON.stringify(credentialResponse) })
       const credential = W3cJwtVerifiableCredential.fromSerializedJwt(
         credentialResponse.successBody.credential as string
       )
