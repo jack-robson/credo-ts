@@ -377,12 +377,9 @@ export class SdJwtVcService {
         jwk: cnf.jwk,
       }
     } else if (cnf.kid) {
-      // 666 add formatting for walt.id key: z6MkjoRhq1jSNJdLiruSXrFFxagqrztZaXHqHGUTKJbcNywp
-      if (cnf.kid === 'did:key:z6MkjoRhq1jSNJdLiruSXrFFxagqrztZaXHqHGUTKJbcNywp') {
-        cnf.kid =
-          'did:key:z6MkjoRhq1jSNJdLiruSXrFFxagqrztZaXHqHGUTKJbcNywp#z6MkjoRhq1jSNJdLiruSXrFFxagqrztZaXHqHGUTKJbcNywp'
-      }
-      if (!cnf.kid.startsWith('did:') || !cnf.kid.includes('#')) {
+      // 666 skip walt.id issuer
+      const skip = cnf.kid == 'did:key:z6MkjoRhq1jSNJdLiruSXrFFxagqrztZaXHqHGUTKJbcNywp'
+      if (!skip && (!cnf.kid.startsWith('did:') || !cnf.kid.includes('#'))) {
         throw new SdJwtVcError('Invalid holder kid for did. Only absolute KIDs for cnf are supported')
       }
       return {
@@ -396,6 +393,12 @@ export class SdJwtVcService {
 
   private async extractKeyFromHolderBinding(agentContext: AgentContext, holder: SdJwtVcHolderBinding) {
     if (holder.method === 'did') {
+      console.log({ holder })
+      // 666 add formatting for walt.id key: z6MkjoRhq1jSNJdLiruSXrFFxagqrztZaXHqHGUTKJbcNywp
+      if (holder.didUrl === 'did:key:z6MkjoRhq1jSNJdLiruSXrFFxagqrztZaXHqHGUTKJbcNywp') {
+        holder.didUrl =
+          'did:key:z6MkjoRhq1jSNJdLiruSXrFFxagqrztZaXHqHGUTKJbcNywp#z6MkjoRhq1jSNJdLiruSXrFFxagqrztZaXHqHGUTKJbcNywp'
+      }
       const parsedDid = parseDid(holder.didUrl)
       if (!parsedDid.fragment) {
         throw new SdJwtVcError(
