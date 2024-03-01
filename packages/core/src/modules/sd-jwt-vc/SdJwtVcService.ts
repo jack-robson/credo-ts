@@ -302,6 +302,11 @@ export class SdJwtVcService {
 
   private async extractKeyFromIssuer(agentContext: AgentContext, issuer: SdJwtVcIssuer) {
     if (issuer.method === 'did') {
+      // 666 add formatting for walt.id key: z6MkjoRhq1jSNJdLiruSXrFFxagqrztZaXHqHGUTKJbcNywp
+      if (issuer.didUrl === 'did:key:z6MkjoRhq1jSNJdLiruSXrFFxagqrztZaXHqHGUTKJbcNywp') {
+        issuer.didUrl =
+          'did:key:z6MkjoRhq1jSNJdLiruSXrFFxagqrztZaXHqHGUTKJbcNywp#z6MkjoRhq1jSNJdLiruSXrFFxagqrztZaXHqHGUTKJbcNywp'
+      }
       const parsedDid = parseDid(issuer.didUrl)
       if (!parsedDid.fragment) {
         throw new SdJwtVcError(
@@ -372,6 +377,11 @@ export class SdJwtVcService {
         jwk: cnf.jwk,
       }
     } else if (cnf.kid) {
+      // 666 add formatting for walt.id key: z6MkjoRhq1jSNJdLiruSXrFFxagqrztZaXHqHGUTKJbcNywp
+      if (cnf.kid === 'did:key:z6MkjoRhq1jSNJdLiruSXrFFxagqrztZaXHqHGUTKJbcNywp') {
+        cnf.kid =
+          'did:key:z6MkjoRhq1jSNJdLiruSXrFFxagqrztZaXHqHGUTKJbcNywp#z6MkjoRhq1jSNJdLiruSXrFFxagqrztZaXHqHGUTKJbcNywp'
+      }
       if (!cnf.kid.startsWith('did:') || !cnf.kid.includes('#')) {
         throw new SdJwtVcError('Invalid holder kid for did. Only absolute KIDs for cnf are supported')
       }

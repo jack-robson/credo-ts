@@ -339,6 +339,8 @@ export class OpenId4VciHolderService {
         credentialResponse.successBody.credential = processSDJWT(credentialResponse.successBody.credential.toString());
       }
 
+      console.log('credentialResponse.successBody.credential', credentialResponse.successBody?.credential);
+
       // Create credential, but we don't store it yet (only after the user has accepted the credential)
       const credential = await this.handleCredentialResponse(agentContext, credentialResponse, {
         verifyCredentialStatus: verifyCredentialStatus ?? false,
@@ -720,9 +722,9 @@ function processSDJWT(sdjwt: string): string {
   
   const isJWT = lastValue.split('.').length - 1 === 2;
   
-  if (!isJWT) {
+  if (!isJWT && !sdjwt.endsWith('~')) {
     return `${sdjwt}~`;
   }
   
-  return lastValue;
+  return sdjwt;
 }
