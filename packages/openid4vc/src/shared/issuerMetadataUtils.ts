@@ -34,10 +34,6 @@ export function getOfferedCredentials(
   const credentialsSupported: OpenId4VciCredentialSupportedWithId[] = []
 
   for (let offeredCredential of offeredCredentials) {
-    // console.log({
-    //   offeredCredential: JSON.stringify(offeredCredential, null, 2),
-    //   typeof_offeredCredential: typeof offeredCredential,
-    // })
     // In draft 12 inline credential offers are removed. It's easier to already remove support now.
     if (typeof offeredCredential !== 'string') {
       // 666 - disabled error
@@ -59,10 +55,6 @@ export function getOfferedCredentials(
         `Offered credential '${offeredCredential}' is not part of credentials_supported of the issuer metadata.`
       )
     }
-
-    // console.log({
-    //   foundSupportedCredential: JSON.stringify(foundSupportedCredential, null, 2),
-    // })
 
     credentialsSupported.push(foundSupportedCredential)
   }

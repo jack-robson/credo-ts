@@ -115,11 +115,6 @@ export class DidDocument {
     // for now we check whether the key id ends with the keyId.
     // so if looking for #123 and key.id is did:key:123#123, it is valid. But #123 as key.id is also valid
 
-    console.log({
-      verificationMethod: this.verificationMethod,
-      keyId,
-    })
-
     const verificationMethod = this.verificationMethod?.find((key) => key.id.endsWith(keyId))
 
     if (!verificationMethod) {
@@ -147,9 +142,7 @@ export class DidDocument {
     const purposes = allowedPurposes ?? allPurposes
 
     for (const purpose of purposes) {
-      console.log({ purpose, 'this[purpose]': this[purpose] })
       for (const key of this[purpose] ?? []) {
-        console.log({ purpose, key })
         if (typeof key === 'string' && key.endsWith(keyId)) {
           return this.dereferenceVerificationMethod(key)
         } else if (typeof key !== 'string' && key.id.endsWith(keyId)) {
