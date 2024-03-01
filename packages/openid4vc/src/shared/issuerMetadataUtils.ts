@@ -40,8 +40,9 @@ export function getOfferedCredentials(
       // throw new CredoError(
       //   'Only referenced credentials pointing to an id in credentials_supported issuer metadata are supported'
       // )
-      // 666 - TODO: don't hardcode this
-      offeredCredential = 'UniversityDegree'
+      // 666 - TODO: find a better way of getting the id from the walt.id credential offer format
+      // @ts-ignore
+      offeredCredential = offeredCredential.types[1] + '-sdjwt'
     }
 
     const foundSupportedCredential = allCredentialsSupported.find(
