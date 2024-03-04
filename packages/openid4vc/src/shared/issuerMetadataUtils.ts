@@ -35,20 +35,49 @@ export function getOfferedCredentials(
 
   for (let offeredCredential of offeredCredentials) {
     // In draft 12 inline credential offers are removed. It's easier to already remove support now.
+
+    // 666 - disabled error
+    // throw new CredoError(
+    //   'Only referenced credentials pointing to an id in credentials_supported issuer metadata are supported'
+    // )
+
+    // Note: ???
+    // 666 - TODO: find a better way of getting the id from the walt.id credential offer format
     if (typeof offeredCredential !== 'string') {
-      // 666 - disabled error
-      // throw new CredoError(
-      //   'Only referenced credentials pointing to an id in credentials_supported issuer metadata are supported'
-      // )
-      // 666 - TODO: find a better way of getting the id from the walt.id credential offer format
       // @ts-ignore
-      offeredCredential = offeredCredential.types[1] + '-sdjwt'
+      const types: string[] = offeredCredential.types
+
+      if (types[1] !== 'UniversityDegreeCredential') {
+        offeredCredential = types[1]
+      } else {
+        console.log({ types })
+        if (types[2] === undefined) {
+          offeredCredential = 'UniversityDegree'
+        } else if (types[2] === 'vc+sd-jwt') {
+          return [
+            {
+              format: 'vc+sd-jwt',
+              id: 'UniversityDegreeCredential-sdjwt',
+              cryptographic_binding_methods_supported: ['did'],
+              cryptographic_suites_supported: ['EdDSA', 'ES256', 'ES256K', 'RSA'],
+              // @ts-ignore
+              types: ['VerifiableCredential', 'UniversityDegreeCredential'],
+            },
+          ]
+        }
+      }
     }
 
     const foundSupportedCredential = allCredentialsSupported.find(
       (supportedCredential): supportedCredential is OpenId4VciCredentialSupportedWithId =>
         supportedCredential.id !== undefined && supportedCredential.id === offeredCredential
     )
+
+    console.log({
+      foundSupportedCredential,
+      allCredentialsSupported: JSON.stringify(allCredentialsSupported),
+      offeredCredential: JSON.stringify(offeredCredential), // 666 - disabled error
+    })
 
     // Make sure the issuer metadata includes the offered credential.
     if (!foundSupportedCredential) {

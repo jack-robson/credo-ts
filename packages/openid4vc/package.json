@@ -2,7 +2,7 @@
   "name": "@credo-ts/openid4vc",
   "main": "build/index",
   "types": "build/index",
-  "version": "0.4.21",
+  "version": "0.4.28",
   "files": [
     "build"
   ],
