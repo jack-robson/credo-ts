@@ -333,6 +333,12 @@ export class OpenId4VciHolderService {
 
       newCNonce = credentialResponse.successBody?.c_nonce
 
+      // 666 - add trailing ~ to end of walt.id SD-JWT
+
+      if (credentialResponse.successBody?.format === 'vc+sd-jwt' && credentialResponse.successBody?.credential) {
+        credentialResponse.successBody.credential = processSDJWT(credentialResponse.successBody.credential.toString())
+      }
+
       // Create credential, but we don't store it yet (only after the user has accepted the credential)
       const credential = await this.handleCredentialResponse(agentContext, credentialResponse, {
         verifyCredentialStatus: verifyCredentialStatus ?? false,
@@ -705,4 +711,18 @@ async function createAuthorizationRequestUri(options: {
       mode: JsonURIMode.X_FORM_WWW_URLENCODED,
     })
   }
+}
+
+function processSDJWT(sdjwt: string): string {
+  const parts = sdjwt.split('~')
+
+  const lastValue = parts[parts.length - 1]
+
+  const isJWT = lastValue.split('.').length - 1 === 2
+
+  if (!isJWT && !sdjwt.endsWith('~')) {
+    return `${sdjwt}~`
+  }
+
+  return sdjwt
 }

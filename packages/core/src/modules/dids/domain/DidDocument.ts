@@ -124,6 +124,12 @@ export class DidDocument {
   }
 
   public dereferenceKey(keyId: string, allowedPurposes?: DidPurpose[]) {
+    // 666 add formatting for walt.id key: z6MkjoRhq1jSNJdLiruSXrFFxagqrztZaXHqHGUTKJbcNywp
+    if (keyId === 'did:key:z6MkjoRhq1jSNJdLiruSXrFFxagqrztZaXHqHGUTKJbcNywp') {
+      keyId =
+        'did:key:z6MkjoRhq1jSNJdLiruSXrFFxagqrztZaXHqHGUTKJbcNywp#z6MkjoRhq1jSNJdLiruSXrFFxagqrztZaXHqHGUTKJbcNywp'
+    }
+
     const allPurposes: DidPurpose[] = [
       'authentication',
       'keyAgreement',

@@ -33,12 +33,21 @@ export function getOfferedCredentials(
 ): OpenId4VciCredentialSupportedWithId[] {
   const credentialsSupported: OpenId4VciCredentialSupportedWithId[] = []
 
-  for (const offeredCredential of offeredCredentials) {
+  for (let offeredCredential of offeredCredentials) {
     // In draft 12 inline credential offers are removed. It's easier to already remove support now.
-    if (typeof offeredCredential !== 'string') {
-      throw new CredoError(
-        'Only referenced credentials pointing to an id in credentials_supported issuer metadata are supported'
-      )
+
+    // 666 - disabled error
+    // throw new CredoError(
+    //   'Only referenced credentials pointing to an id in credentials_supported issuer metadata are supported'
+    // )
+
+    // Note: ???
+    // 666 - TODO: find a better way of getting the id from the walt.id credential offer format
+
+    // @ts-ignore
+    const types: string[] = offeredCredential.types
+    if (typeof offeredCredential !== 'string' && types[1] === 'UniversityDegreeCredential') {
+      offeredCredential = types[2] === undefined ? 'UniversityDegree' : `UniversityDegreeCredential-${types[2]}`
     }
 
     const foundSupportedCredential = allCredentialsSupported.find(
